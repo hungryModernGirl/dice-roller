@@ -1,12 +1,12 @@
 <form id="dice-form" action="/" method="post">
-    <select name="sides">
+    <select id="sides" name="sides">
         <option value=4>4</option>
         <option value=6>6</option>
         <option value=8>8</option>
         <option value=10>10</option>
         <option value=12>12</option>
         <option value=20>20</option>
-    <input type="number" name="how_many" min="0" step="1">
+    <input type="number" id="how-many" name="how_many" min="0" step="1">
     <input type="submit" name="go" value="roll 'em">
 </form>
 <div id="result">
@@ -14,13 +14,24 @@
 </div>
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      var socket = io();
-      $('#dice-form').submit(function(){
-        socket.emit('dice roll', 'waddup');
-        return false;
-      });
-      socket.on('dice roll', function(msg){
-        $('#result').append($('<li>').text(msg));
-      });
-    </script>
+<script>
+  var socket = io();
+  $('#dice-form').submit(function(){
+    socket.emit('dice roll', [$('select#sides').val(), $('input#how-many').val()]);
+    return false;
+  });
+  socket.on('dice roll', function(val_array){
+    var result = calculateRoll(val_array);
+    $('#result').text(result); //append($('<li>').text(result));
+  });
+  function calculateRoll(val_array){
+    var sides = val_array[0];
+    var how_many = val_array[1];
+    var total = 0;
+    for (i = 0; i < how_many; i++){
+      var rand = Math.floor((Math.random() * sides) + 1);
+      total += rand;
+    }
+    return total;
+}
+</script>
