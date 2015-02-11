@@ -1,3 +1,8 @@
+/*
+ * function to calculate total value of the dice roll
+ *
+ */
+
 function calculateRoll(val_array){
     var sides = val_array[0];
     var how_many = val_array[1];

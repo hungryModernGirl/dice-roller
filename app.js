@@ -11,8 +11,8 @@ var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 
 
-http.listen(3000);
-console.log('listening on 3000');
+http.listen(8080);
+console.log('listening on 8080');
 
 /* 
  * Stylus styling setup
@@ -44,19 +44,32 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyparser.urlencoded({extended: false}));
 
 
-
+/*
+ * loads template dice.handlebars
+ *
+ */
 app.get('/', function (req, res) {
   res.render('dice.handlebars');
 })
 
+/*
+ * CURRENTLY IRRELEVANT WITH SOCKET.IO SETUP
+ * loads template dice.handlebars with result of dice roll
+ *
+ */
 app.post('/', function(req, res) {
   res.render('dice.handlebars', {result: calculateRoll(req.body.sides, req.body.how_many)});
 })
 
+
+/*
+ * receives dice roll emission on submission, emits values back to template
+ *
+ */
 io.on('connection', function(socket){
   console.log('made connection');
-  socket.on('dice roll', function(msg){
-    socket.emit('dice roll', msg);
+  socket.on('dice roll', function(vars){
+    socket.emit('dice roll', vars);
   });
 });
 
