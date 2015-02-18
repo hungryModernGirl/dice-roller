@@ -1,5 +1,5 @@
 # dice-roller
-rollin' dice
+rollin' dice for DnD purposes
 
 application to roll dice of varying sizes. roll just one or several at one time.
 
